@@ -44,7 +44,7 @@ export default function Header() {
         <Link to="/projects" className="hover:text-blue-400">Projects</Link>
         <Link to="/connect" className="hover:text-blue-400">Connect</Link>
         <Link to="/chat" className="hover:text-blue-400">Chat</Link>
-        <div><Notifications /> </div>
+        {isLoggedIn && <div><Notifications /></div>}
         {!isLoggedIn ? (
           <Link to="/register" className="hover:underline">Register</Link>
         ) : (
