@@ -8,7 +8,9 @@ import Profile from './routes/Profile';
 import Connect from './routes/Swipe';
 import Projects from './routes/Projects';
 import Chat from './routes/Chat';
+import YourProjects from './routes/YourProjects';
 import Settings from './routes/Settings';
+import Notifications from './routes/Notifications';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -19,10 +21,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route index element={<Home />} />
           <Route path="register" element={<Register />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="yourProjects" element={<YourProjects />} />
           <Route path="connect" element={<Connect />} />
           <Route path="projects" element={<Projects />} />
           <Route path="chat" element={<Chat />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="notifications" element={<Notifications />} />
         </Route>
       </Routes>
     </BrowserRouter>

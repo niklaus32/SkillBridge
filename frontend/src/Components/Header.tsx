@@ -27,7 +27,7 @@ export default function Header() {
   return (
     <header className="w-full bg-white dark:bg-gray-800 shadow p-4 flex items-center justify-between">
       <div className="flex items-center gap-4">
-        <Link to="/" className="text-lg font-bold text-blue-600 dark:text-blue-300 hover:underline">SkillBridge</Link>
+        <Link to="/" className="text-lg font-bold text-blue-600 dark:text-blue-400 hover:underline">SkillBridge</Link>
         <form className="hidden md:block relative">
           <span className="absolute left-2 top-1.5 text-gray-400 dark:text-gray-500 pointer-events-none">
             <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
@@ -40,19 +40,17 @@ export default function Header() {
         </form>
       </div>
       <nav className="flex items-center gap-4">
-        <Link to="/" className="hover:underline">Home</Link>
-        <Link to="/projects" className="hover:underline">Projects</Link>
-        <Link to="/connect" className="hover:underline">Connect</Link>
-        <Link to="/chat" className="hover:underline">Chat</Link>
-        <div>
-            <Notifications />
-        </div>
+        <Link to="/" className="hover:text-blue-400">Home</Link>
+        <Link to="/projects" className="hover:text-blue-400">Projects</Link>
+        <Link to="/connect" className="hover:text-blue-400">Connect</Link>
+        <Link to="/chat" className="hover:text-blue-400">Chat</Link>
+        <div><Notifications /> </div>
         {!isLoggedIn ? (
           <Link to="/register" className="hover:underline">Register</Link>
         ) : (
           <div className="relative" ref={profileRef}>
             <button
-              className="hover:underline flex items-center gap-1"
+              className="hover:text-blue-400 flex items-center gap-1"
               onClick={() => setProfileOpen((open) => !open)}
               type="button"
               aria-haspopup="true"
@@ -64,7 +62,7 @@ export default function Header() {
             {profileOpen && (
               <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 shadow-lg rounded z-20">
                 <Link to="/profile" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Profile</Link>
-                <Link to="/projects" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Your Projects</Link>
+                <Link to="/yourProjects" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Your Projects</Link>
                 <Link to="/settings" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">Settings</Link>
               </div>
             )}
