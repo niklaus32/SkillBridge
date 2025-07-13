@@ -10,7 +10,7 @@ import Projects from './routes/Projects';
 import Chat from './routes/Chat';
 import YourProjects from './routes/YourProjects';
 import Settings from './routes/Settings';
-import Notifications from './routes/Notifications';
+import Notifications from './routes/NotificationsPage';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

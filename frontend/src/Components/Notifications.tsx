@@ -1,8 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
+import { IoMdNotifications } from "react-icons/io";
+import { useNavigate } from 'react-router-dom';
 
 export default function Notifications() {
   const [notifsOpen, setNotifsOpen] = useState(false);
   const notificationsRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   // Placeholder notifications
   const notifications = [
     { id: 1, message: 'Welcome to SkillBridge!' },
@@ -36,7 +39,7 @@ export default function Notifications() {
         aria-label="Notifications"
         aria-expanded={notifsOpen}
       >
-        <span role="img" aria-label="bell">🔔</span>
+        <IoMdNotifications />
         {notifications.length > 0 && (
           <span className="absolute top-0 right-0 inline-block w-2 h-2 bg-red-500 rounded-full"></span>
         )}
@@ -58,7 +61,7 @@ export default function Notifications() {
             className="mt-3 w-full py-1 px-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring"
             onClick={() => {
               setNotifsOpen(false);
-              window.location.href = '/notifications';
+              navigate('/notifications');
             }}
           >
             View All Notifications

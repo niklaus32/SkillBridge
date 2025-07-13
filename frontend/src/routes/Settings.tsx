@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const SECTIONS = [
   { key: 'profile', label: 'Profile' },
@@ -9,12 +9,35 @@ const SECTIONS = [
 
 export default function Settings() {
   const [section, setSection] = useState('profile');
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <div className="max-w-3xl mx-auto p-4 flex flex-col md:flex-row gap-6">
-      <aside className="w-full md:w-1/4 bg-white dark:bg-gray-800 rounded shadow p-4 mb-4 md:mb-0">
+      {/* Sidebar for desktop, dropdown for mobile */}
+      <aside className="w-full md:w-1/4 bg-white dark:bg-gray-800 rounded shadow p-4 mb-4 md:mb-0 relative">
         <h2 className="text-lg font-bold mb-4">Settings</h2>
-        <nav className="flex flex-col gap-2">
+        <div className="block md:hidden mb-4">
+          <button
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-700"
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            {SECTIONS.find(s => s.key === section)?.label} ▾
+          </button>
+          {menuOpen && (
+            <nav className="absolute z-30 bg-white dark:bg-gray-800 rounded shadow mt-2 w-3/4">
+              {SECTIONS.map((s) => (
+                <button
+                  key={s.key}
+                  className={`block w-full text-left px-3 py-2 rounded hover:bg-blue-100 dark:hover:bg-gray-700 ${section === s.key ? 'bg-blue-600 text-white dark:bg-blue-500' : ''}`}
+                  onClick={() => { setSection(s.key); setMenuOpen(false); }}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </nav>
+          )}
+        </div>
+        <nav className="hidden md:flex flex-col gap-2">
           {SECTIONS.map((s) => (
             <button
               key={s.key}
@@ -35,6 +58,7 @@ export default function Settings() {
     </div>
   );
 }
+
 
 function ProfileSettings() {
   const [form, setForm] = useState({
@@ -72,9 +96,10 @@ function AccountSettings() {
     <div>
       <h3 className="text-xl font-semibold mb-4">Account Settings</h3>
       <div className="mb-4">
+        
         <label className="block font-medium mb-1">Profile Privacy</label>
         <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded" value={privacy} onChange={e => setPrivacy(e.target.value)}>
-          <option value="public">Public</option>
+          <option className="text-black" value="public">Public</option>
           <option value="private">Private</option>
         </select>
       </div>
@@ -104,17 +129,15 @@ function NotificationSettings() {
   );
 }
 
-import { useEffect } from 'react';
-
 function AppearanceSettings() {
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('theme');
       if (saved === 'dark' || saved === 'light') return saved;
       // system default
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      return 'system';
     }
-    return 'light';
+    return 'system';
   });
 
   useEffect(() => {
@@ -139,17 +162,13 @@ function AppearanceSettings() {
     setTheme(value);
   }
 
-  function handleSave() {
-    // Optionally show a toast or feedback
-  }
-
   return (
     <div>
       <h3 className="text-xl font-semibold mb-4">Appearance</h3>
       <div className="mb-4">
         <label className="block font-medium mb-1">Theme</label>
         <select
-          className="w-full px-3 py-2 border border-gray-700 dark:border-gray-700 rounded"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded"
           value={theme}
           onChange={e => handleThemeChange(e.target.value)}
         >
@@ -158,13 +177,7 @@ function AppearanceSettings() {
           <option value="dark">Dark</option>
         </select>
       </div>
-      <button
-        type="button"
-        className="py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700"
-        onClick={handleSave}
-      >
-        Save
-      </button>
     </div>
   );
 }
+

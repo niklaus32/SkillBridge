@@ -2,6 +2,7 @@
 import { Link } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import Notifications from './Notifications';
+import { IoMdHome, IoIosFolderOpen, IoIosLink, IoIosChatboxes } from "react-icons/io";
 
 // Simulate authentication state (replace with real auth logic later)
 const isLoggedIn = true; // Change to true to simulate logged-in state
@@ -9,6 +10,12 @@ const isLoggedIn = true; // Change to true to simulate logged-in state
 export default function Header() {
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+  const menu=[
+    {
+      name:'Home',
+      icon:IoMdHome
+    }
+  ]
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -40,10 +47,10 @@ export default function Header() {
         </form>
       </div>
       <nav className="flex items-center gap-4">
-        <Link to="/" className="hover:text-blue-400">Home</Link>
-        <Link to="/projects" className="hover:text-blue-400">Projects</Link>
-        <Link to="/connect" className="hover:text-blue-400">Connect</Link>
-        <Link to="/chat" className="hover:text-blue-400">Chat</Link>
+        <Link to="/" className="flex items-center gap-1 hover:text-blue-400"><IoMdHome/>Home</Link>
+        <Link to="/projects" className="flex items-center gap-1 hover:text-blue-400"><IoIosFolderOpen/>Projects</Link>
+        <Link to="/connect" className="flex items-center gap-1 hover:text-blue-400"><IoIosLink/>Connect</Link>
+        <Link to="/chat" className="flex items-center gap-1 hover:text-blue-400"><IoIosChatboxes/>Chat</Link>
         {isLoggedIn && <div><Notifications /></div>}
         {!isLoggedIn ? (
           <Link to="/register" className="hover:underline">Register</Link>
