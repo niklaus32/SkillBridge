@@ -1,101 +1,91 @@
-import { useState } from 'react';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Register() {
   const [form, setForm] = useState({
-    firstName: '',
-    lastName: '',
-    username: '',
-    email: '',
-    password: '',
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    password: "",
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-  }
+  };
 
-  function handleSubmit(e: React.FormEvent) {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-  }
+    // TODO: Add Firebase registration logic here
+    if (!form.firstName || !form.lastName || !form.username || !form.email || !form.password) {
+      setError("All fields are required.");
+      return;
+    }
+    setError("");
+    // Registration logic...
+  };
 
   return (
-    <div className="max-w-md mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Register</h1>
-      {submitted ? (
-        <div className="bg-green-100 text-green-800 p-3 rounded mb-4">Registration simulated! (No backend yet)</div>
-      ) : (
-        <form onSubmit={handleSubmit} className="space-y-4 bg-white dark:bg-gray-800 p-4 rounded shadow">
-          <div className="flex gap-2">
-            <div className="w-1/2">
-              <label htmlFor="name" className="block font-medium mb-1">First Name</label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                value={form.firstName}
-                onChange={handleChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring"
-              />
-            </div>
-            <div className="w-1/2">
-              <label htmlFor="lastName" className="block font-medium mb-1">Last Name</label>
-              <input
-                id="lastName"
-                name="lastName"
-                type="text"
-                value={form.lastName}
-                onChange={handleChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring"
-              />
-            </div>
-          </div>
-          <div>
-            <label htmlFor="email" className="block font-medium mb-1">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={form.email}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring"
-            />
-          </div>
-          <div>
-            <label htmlFor="username" className="block font-medium mb-1">Username</label>
-            <input
-              id="username"
-              name="username"
-              type="text"
-              value={form.username}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring"
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="block font-medium mb-1">Password</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring"
-          >
-            Register
-          </button>
-        </form>
-      )}
-    </div>
+    <section className="flex min-h-[60vh] items-center justify-center">
+      <form onSubmit={handleSubmit} className="w-full max-w-md p-8 bg-white rounded-lg shadow-md flex flex-col gap-4">
+        <h1 className="text-2xl font-bold text-indigo-700 mb-2 text-center">Sign Up</h1>
+        {error && <div className="text-red-600 text-sm mb-2">{error}</div>}
+        <div className="flex gap-4">
+          <input
+            type="text"
+            name="firstName"
+            placeholder="First Name"
+            value={form.firstName}
+            onChange={handleChange}
+            className="border rounded px-3 py-2 w-1/2"
+            required
+          />
+          <input
+            type="text"
+            name="lastName"
+            placeholder="Last Name"
+            value={form.lastName}
+            onChange={handleChange}
+            className="border rounded px-3 py-2 w-1/2"
+            required
+          />
+        </div>
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          value={form.username}
+          onChange={handleChange}
+          className="border rounded px-3 py-2"
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={handleChange}
+          className="border rounded px-3 py-2"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={handleChange}
+          className="border rounded px-3 py-2"
+          required
+        />
+        <button type="submit" className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition">Sign Up</button>
+        <div className="text-center mt-2 text-sm text-gray-600">
+          Already have an account?
+        </div>
+        <Link to="/login">
+          <button type="button" className="w-full mt-1 bg-white border border-indigo-600 text-indigo-700 py-2 rounded-lg font-semibold hover:bg-indigo-50 transition">Sign In</button>
+        </Link>
+      </form>
+    </section>
   );
 }

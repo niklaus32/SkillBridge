@@ -5,7 +5,7 @@ import Notifications from './Notifications';
 import { IoMdHome, IoIosFolderOpen, IoIosLink, IoIosChatboxes } from "react-icons/io";
 
 // Simulate authentication state (replace with real auth logic later)
-const isLoggedIn = true; // Change to true to simulate logged-in state
+const isLoggedIn = false; // Change to true to simulate logged-in state
 
 export default function Header() {
   const [profileOpen, setProfileOpen] = useState(false);

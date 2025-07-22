@@ -1,15 +1,32 @@
+import React from "react";
+
+
 export default function Home() {
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">Welcome to SkillBridge</h1>
-      <p className="mb-2">SkillBridge is your universal networking platform for connecting with professionals, discovering projects, and building your network.</p>
-      <ul className="list-disc pl-6 mb-4">
-        <li>Swipe to connect with others</li>
-        <li>Join or create projects</li>
-        <li>Chat in real time</li>
-        <li>Manage your profile and settings</li>
-      </ul>
-      <p className="text-gray-500">Get started by exploring the navigation above!</p>
-    </div>
+    <section className="flex min-h-[60vh] items-center justify-center">
+      <div className="w-full max-w-2xl p-8 bg-white rounded-lg shadow-md text-center">
+        <h1 className="text-5xl font-extrabold text-indigo-700 mb-4 drop-shadow-lg">
+          Welcome to Skillbridge
+        </h1>
+        <p className="text-xl text-gray-700 mb-8 max-w-xl mx-auto">
+          Connect with people who share your skills and goals. Showcase your
+          projects, join events, and grow together.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 mt-4 justify-center">
+          <a
+            href="/connect"
+            className="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition"
+          >
+            Find Connections
+          </a>
+          <a
+            href="/projects"
+            className="px-6 py-3 bg-white border border-indigo-600 text-indigo-700 rounded-lg shadow hover:bg-indigo-50 transition"
+          >
+            Explore Projects
+          </a>
+        </div>
+      </div>
+    </section>
   );
 }
