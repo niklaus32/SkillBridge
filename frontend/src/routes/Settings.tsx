@@ -1,59 +1,51 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import ThemeToggle from '../Components/ThemeToggle';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
 const SECTIONS = [
-  { key: 'profile', label: 'Profile' },
-  { key: 'account', label: 'Account' },
-  { key: 'notifications', label: 'Notifications' },
-  { key: 'appearance', label: 'Appearance' },
+  { key: 'profile', label: 'Profile', path: 'profile' },
+  { key: 'account', label: 'Account', path: 'account' },
+  { key: 'notifications', label: 'Notifications', path: 'notifications' },
+  { key: 'appearance', label: 'Appearance', path: 'appearance' },
 ];
 
 export default function Settings() {
-  const [section, setSection] = useState('profile');
-  const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  // Support both /settings and /settings/:section
+  const pathParts = location.pathname.split('/');
+  const sectionPath = pathParts[pathParts.length - 1];
+  const currentSection = SECTIONS.find(s => s.path === sectionPath)?.key || 'profile';
 
   return (
-    <div className="max-w-3xl mx-auto p-4 flex flex-col md:flex-row gap-6">
-      {/* Sidebar for desktop, dropdown for mobile */}
-      <aside className="w-full md:w-1/4 bg-white dark:bg-gray-800 rounded shadow p-4 mb-4 md:mb-0 relative">
-        <h2 className="text-lg font-bold mb-4">Settings</h2>
-        <div className="block md:hidden mb-4">
-          <button
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded bg-gray-100 dark:bg-gray-700"
-            onClick={() => setMenuOpen((open) => !open)}
-          >
-            {SECTIONS.find(s => s.key === section)?.label} ▾
-          </button>
-          {menuOpen && (
-            <nav className="absolute z-30 bg-white dark:bg-gray-800 rounded shadow mt-2 w-3/4">
-              {SECTIONS.map((s) => (
-                <button
-                  key={s.key}
-                  className={`block w-full text-left px-3 py-2 rounded hover:bg-blue-100 dark:hover:bg-gray-700 ${section === s.key ? 'bg-blue-600 text-white dark:bg-blue-500' : ''}`}
-                  onClick={() => { setSection(s.key); setMenuOpen(false); }}
-                >
-                  {s.label}
-                </button>
-              ))}
-            </nav>
-          )}
-        </div>
-        <nav className="hidden md:flex flex-col gap-2">
+    <div className="max-w-5xl mx-auto w-full p-0 flex flex-row gap-0">
+      {/* Sidebar - GitHub style */}
+      <aside className="w-64 min-h-screen bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col py-8 px-6">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Settings</h2>
+        <nav className="flex flex-col gap-1">
           {SECTIONS.map((s) => (
             <button
               key={s.key}
-              className={`text-left px-3 py-2 rounded hover:bg-blue-100 dark:hover:bg-gray-700 ${section === s.key ? 'bg-blue-600 text-white dark:bg-blue-500' : ''}`}
-              onClick={() => setSection(s.key)}
+              className={`text-left px-4 py-2 rounded font-medium text-base transition-colors ${currentSection === s.key ? 'bg-gray-100 dark:bg-gray-900 text-indigo-700 dark:text-indigo-300 border-l-4 border-indigo-500' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
+              onClick={() => navigate(`/settings/${s.path}`)}
             >
               {s.label}
             </button>
           ))}
         </nav>
       </aside>
-      <main className="flex-1 bg-white dark:bg-gray-800 rounded shadow p-6">
-        {section === 'profile' && <ProfileSettings />}
-        {section === 'account' && <AccountSettings />}
-        {section === 'notifications' && <NotificationSettings />}
-        {section === 'appearance' && <AppearanceSettings />}
+      {/* Main content - subpage */}
+      <main className="flex-1 bg-white dark:bg-gray-900 min-h-screen p-0">
+        <div className="bg-white dark:bg-gray-900 min-h-screen p-10">
+          <Routes>
+            <Route path="profile" element={<ProfileSettings />} />
+            <Route path="account" element={<AccountSettings />} />
+            <Route path="notifications" element={<NotificationSettings />} />
+            <Route path="appearance" element={<AppearanceSettings />} />
+            <Route path="" element={<ProfileSettings />} />
+            <Route path="*" element={<ProfileSettings />} />
+          </Routes>
+        </div>
       </main>
     </div>
   );
@@ -67,21 +59,21 @@ function ProfileSettings() {
     username: '',
   });
   return (
-    <div>
-      <h3 className="text-xl font-semibold mb-4">Edit Profile</h3>
-      <form className="space-y-4 max-w-md">
-        <div className="flex gap-2">
+    <div className="max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Edit Profile</h1>
+      <form className="space-y-6">
+        <div className="flex gap-4">
           <div className="w-1/2">
-            <label className="block font-medium mb-1">First Name</label>
+            <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">First Name</label>
             <input className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
           </div>
           <div className="w-1/2">
-            <label className="block font-medium mb-1">Last Name</label>
+            <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">Last Name</label>
             <input className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring" value={form.lastName} onChange={e => setForm(f => ({ ...f, lastName: e.target.value }))} />
           </div>
         </div>
         <div>
-          <label className="block font-medium mb-1">Username</label>
+          <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">Username</label>
           <input className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring" value={form.username} onChange={e => setForm(f => ({ ...f, username: e.target.value }))} />
         </div>
         <button type="button" className="py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
@@ -93,11 +85,10 @@ function ProfileSettings() {
 function AccountSettings() {
   const [privacy, setPrivacy] = useState('public');
   return (
-    <div>
-      <h3 className="text-xl font-semibold mb-4">Account Settings</h3>
-      <div className="mb-4">
-        
-        <label className="block font-medium mb-1">Profile Privacy</label>
+    <div className="max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Account Settings</h1>
+      <div className="mb-6">
+        <label className="block font-semibold mb-2 text-gray-700 dark:text-gray-300">Profile Privacy</label>
         <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded" value={privacy} onChange={e => setPrivacy(e.target.value)}>
           <option className="text-black" value="public">Public</option>
           <option value="private">Private</option>
@@ -112,14 +103,14 @@ function NotificationSettings() {
   const [emailNotif, setEmailNotif] = useState(true);
   const [pushNotif, setPushNotif] = useState(false);
   return (
-    <div>
-      <h3 className="text-xl font-semibold mb-4">Notification Settings</h3>
-      <div className="mb-4 flex flex-col gap-2">
-        <label className="flex items-center gap-2">
+    <div className="max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Notification Settings</h1>
+      <div className="mb-6 flex flex-col gap-4">
+        <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
           <input type="checkbox" checked={emailNotif} onChange={e => setEmailNotif(e.target.checked)} />
           Email notifications
         </label>
-        <label className="flex items-center gap-2">
+        <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
           <input type="checkbox" checked={pushNotif} onChange={e => setPushNotif(e.target.checked)} />
           Push notifications
         </label>
@@ -130,53 +121,12 @@ function NotificationSettings() {
 }
 
 function AppearanceSettings() {
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('theme');
-      if (saved === 'dark' || saved === 'light') return saved;
-      // system default
-      return 'system';
-    }
-    return 'system';
-  });
-
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else if (theme === 'light') {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    } else {
-      // system
-      localStorage.removeItem('theme');
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    }
-  }, [theme]);
-
-  function handleThemeChange(value: string) {
-    setTheme(value);
-  }
-
   return (
-    <div>
-      <h3 className="text-xl font-semibold mb-4">Appearance</h3>
-      <div className="mb-4">
-        <label className="block font-medium mb-1">Theme</label>
-        <select
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded"
-          value={theme}
-          onChange={e => handleThemeChange(e.target.value)}
-        >
-          <option value="system">System Default</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
-      </div>
+    <div className="max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Appearance</h1>
+      <label className="block font-semibold text-lg mb-4 dark:text-white">Theme</label>
+      <ThemeToggle />
+      <div className="mt-4 text-gray-500 dark:text-gray-400">Switch between light and dark mode for the app interface.</div>
     </div>
   );
 }

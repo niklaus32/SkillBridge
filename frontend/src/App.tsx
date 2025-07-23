@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
 import Home from "./routes/Home";
 import Connect from "./routes/Connect";
@@ -8,6 +8,7 @@ import Calendar from "./routes/Calendar";
 import Chat from "./routes/Chat";
 import Register from "./routes/Register";
 import Login from "./routes/Login";
+import Settings from "./routes/Settings";
 
 
 // Dummy auth state for demonstration; replace with Firebase Auth logic
@@ -23,21 +24,34 @@ const useAuth = () => {
 
 function ProfileDropdown({ onLogout }) {
   const [open, setOpen] = useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function handleClick(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [open]);
+
   return (
-    <div className="relative">
+    <div className="relative" ref={dropdownRef}>
       <button
-        className="flex items-center gap-2 px-4 py-2 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition"
+        className="flex items-center gap-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-700 dark:hover:bg-indigo-800 rounded-lg hover:bg-indigo-100 transition"
         onClick={() => setOpen((v) => !v)}
       >
-        <span className="font-semibold text-indigo-700">Profile</span>
+        <span className="font-semibold text-indigo-700 dark:text-white">Profile</span>
         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
       </button>
       {open && (
-        <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-20">
-          <Link to="/profile" className="block px-4 py-2 hover:bg-indigo-50">Profile</Link>
-          <Link to="/settings" className="block px-4 py-2 hover:bg-indigo-50">Settings</Link>
+        <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-20">
+          <Link to="/profile" className="block px-4 py-2 hover:bg-indigo-50 dark:hover:bg-gray-900 rounded-lg">Profile</Link>
+          <Link to="/settings" className="block px-4 py-2 hover:bg-indigo-50 dark:hover:bg-gray-900 rounded-lg">Settings</Link>
           <button
-            className="block w-full text-left px-4 py-2 hover:bg-indigo-50 text-red-600"
+            className="block w-full text-left px-4 py-2 hover:bg-indigo-50 dark:hover:bg-gray-900 rounded-lg text-red-600"
             onClick={() => { setOpen(false); onLogout(); }}
           >Logout</button>
         </div>
@@ -58,10 +72,10 @@ function App() {
   const auth = useAuth();
   return (
     <Router>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
-        <header className="bg-white shadow sticky top-0 z-10">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:bg-zinc-900 dark:text-gray-100 flex flex-col">
+        <header className="bg-white dark:bg-gray-800 shadow sticky top-0 z-10">
           <div className="max-w-5xl mx-auto flex items-center justify-between p-4">
-            <Link to="/" className="text-2xl font-extrabold text-indigo-700 tracking-tight">Skillbridge</Link>
+            <Link to="/" className="text-2xl font-extrabold text-indigo-700 tracking-tight">SkillBridge</Link>
             <nav className="flex gap-6 text-lg items-center">
               <Link to="/connect" className="hover:text-indigo-600 transition">Connect</Link>
               <Link to="/projects" className="hover:text-indigo-600 transition">Projects</Link>
@@ -75,7 +89,8 @@ function App() {
             </nav>
           </div>
         </header>
-        <main className="flex-1 max-w-5xl mx-auto w-full p-6">
+        <main className="flex-1 bg-white dark:bg-zinc-900 transition-colors">
+
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/connect" element={<Connect />} />
@@ -84,6 +99,7 @@ function App() {
             <Route path="/chat" element={<Chat />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/settings/*" element={<Settings />} />
           </Routes>
         </main>
       </div>

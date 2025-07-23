@@ -1,24 +1,19 @@
 @import "tailwindcss";
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Dark theme overrides using Tailwind's dark class */
+html.dark, .dark {
+  background-color: #18181b !important; /* Tailwind zinc-900, not pure black */
+  color: #f3f4f6 !important; /* Tailwind gray-100 */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+body {
+  background-color: #fff;
+  color: #222;
+}
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-.card {
-  padding: 2em;
-}
 
-.read-the-docs {
-  color: #888;
-}

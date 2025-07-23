@@ -27,8 +27,8 @@ export default function Register() {
   };
 
   return (
-    <section className="flex min-h-[60vh] items-center justify-center">
-      <form onSubmit={handleSubmit} className="w-full max-w-md p-8 bg-white rounded-lg shadow-md flex flex-col gap-4">
+    <section className="flex min-h-[60vh] items-center justify-center bg-white dark:bg-zinc-900">
+      <form onSubmit={handleSubmit} className="w-full max-w-md p-8 bg-white dark:bg-gray-900 rounded-lg shadow-md flex flex-col gap-4">
         <h1 className="text-2xl font-bold text-indigo-700 mb-2 text-center">Sign Up</h1>
         {error && <div className="text-red-600 text-sm mb-2">{error}</div>}
         <div className="flex gap-4">

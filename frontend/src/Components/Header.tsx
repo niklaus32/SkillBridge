@@ -1,7 +1,6 @@
 
 import { Link } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
-import Notifications from './Notifications';
 import { IoMdHome, IoIosFolderOpen, IoIosLink, IoIosChatboxes } from "react-icons/io";
 
 // Simulate authentication state (replace with real auth logic later)
@@ -51,7 +50,6 @@ export default function Header() {
         <Link to="/projects" className="flex items-center gap-1 hover:text-blue-400"><IoIosFolderOpen/>Projects</Link>
         <Link to="/connect" className="flex items-center gap-1 hover:text-blue-400"><IoIosLink/>Connect</Link>
         <Link to="/chat" className="flex items-center gap-1 hover:text-blue-400"><IoIosChatboxes/>Chat</Link>
-        {isLoggedIn && <div><Notifications /></div>}
         {!isLoggedIn ? (
           <Link to="/register" className="hover:underline">Register</Link>
         ) : (
