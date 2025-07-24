@@ -1,0 +1,69 @@
+# Node
+node_modules/
+.env
+.env.*
+dist/
+build/
+.cache/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Vite
+.vite/
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
+
+# Test/coverage
+coverage/
+*.lcov
+
+# Misc
+*.local
+*.sublime-workspace
+*.sublime-project
+.idea/
+*.swp
+
+# Logs
+logs/
+
+# Mac
+Icon?
+
+# Windows
+*.exe
+*.dll
+*.bat
+*.cmd
+
+# Python (if any)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# JetBrains
+*.iml
+.idea/
+
+# Others
+*.tgz
+*.gz
+*.zip
+*.tar
+*.rar
+*.7z
+
+# Storybook
+storybook-static/
+
