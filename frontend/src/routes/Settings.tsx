@@ -5,7 +5,6 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 const SECTIONS = [
   { key: 'profile', label: 'Profile', path: 'profile' },
   { key: 'account', label: 'Account', path: 'account' },
-  { key: 'notifications', label: 'Notifications', path: 'notifications' },
   { key: 'appearance', label: 'Appearance', path: 'appearance' },
 ];
 
@@ -40,7 +39,6 @@ export default function Settings() {
           <Routes>
             <Route path="profile" element={<ProfileSettings />} />
             <Route path="account" element={<AccountSettings />} />
-            <Route path="notifications" element={<NotificationSettings />} />
             <Route path="appearance" element={<AppearanceSettings />} />
             <Route path="" element={<ProfileSettings />} />
             <Route path="*" element={<ProfileSettings />} />
@@ -93,27 +91,6 @@ function AccountSettings() {
           <option className="text-black" value="public">Public</option>
           <option value="private">Private</option>
         </select>
-      </div>
-      <button type="button" className="py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
-    </div>
-  );
-}
-
-function NotificationSettings() {
-  const [emailNotif, setEmailNotif] = useState(true);
-  const [pushNotif, setPushNotif] = useState(false);
-  return (
-    <div className="max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Notification Settings</h1>
-      <div className="mb-6 flex flex-col gap-4">
-        <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-          <input type="checkbox" checked={emailNotif} onChange={e => setEmailNotif(e.target.checked)} />
-          Email notifications
-        </label>
-        <label className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-          <input type="checkbox" checked={pushNotif} onChange={e => setPushNotif(e.target.checked)} />
-          Push notifications
-        </label>
       </div>
       <button type="button" className="py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
     </div>

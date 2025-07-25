@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import Home from "./routes/Home";
 import Connect from "./routes/Connect";
 import Projects from "./routes/Projects";
@@ -9,16 +9,23 @@ import Chat from "./routes/Chat";
 import Register from "./routes/Register";
 import Login from "./routes/Login";
 import Settings from "./routes/Settings";
+import Profile from "./routes/Profile";
 
+import { auth } from "./firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
-// Dummy auth state for demonstration; replace with Firebase Auth logic
 const useAuth = () => {
-  // Replace with real auth state from Firebase
-  const [user, setUser] = useState({ name: "Demo User" }); // Pretend logged in
+  const [user, setUser] = useState<any>(null);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+    });
+    return () => unsubscribe();
+  }, []);
   return {
     user,
-    login: () => setUser({ name: "Demo User" }),
-    logout: () => setUser(null),
+    login: () => {}, // Login handled in Login/Register pages
+    logout: () => signOut(auth),
   };
 };
 
@@ -37,6 +44,11 @@ function ProfileDropdown({ onLogout }) {
     return () => document.removeEventListener('mousedown', handleClick);
   }, [open]);
 
+  const handleButtonClick = (cb?: () => void) => {
+    setOpen(false);
+    if (cb) cb();
+  };
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button
@@ -48,11 +60,11 @@ function ProfileDropdown({ onLogout }) {
       </button>
       {open && (
         <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-20">
-          <Link to="/profile" className="block px-4 py-2 hover:bg-indigo-50 dark:hover:bg-gray-900 rounded-lg">Profile</Link>
-          <Link to="/settings" className="block px-4 py-2 hover:bg-indigo-50 dark:hover:bg-gray-900 rounded-lg">Settings</Link>
+          <Link to="/profile" className="block px-4 py-2 hover:bg-indigo-50 dark:hover:bg-gray-900 rounded-lg" onClick={() => handleButtonClick()}>Profile</Link>
+          <Link to="/settings" className="block px-4 py-2 hover:bg-indigo-50 dark:hover:bg-gray-900 rounded-lg" onClick={() => handleButtonClick()}>Settings</Link>
           <button
             className="block w-full text-left px-4 py-2 hover:bg-indigo-50 dark:hover:bg-gray-900 rounded-lg text-red-600"
-            onClick={() => { setOpen(false); onLogout(); }}
+            onClick={() => handleButtonClick(onLogout)}
           >Logout</button>
         </div>
       )}
@@ -70,40 +82,59 @@ function AuthButtons() {
 
 function App() {
   const auth = useAuth();
-  return (
-    <Router>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:bg-zinc-900 dark:text-gray-100 flex flex-col">
-        <header className="bg-white dark:bg-gray-800 shadow sticky top-0 z-10">
-          <div className="max-w-5xl mx-auto flex items-center justify-between p-4">
-            <Link to="/" className="text-2xl font-extrabold text-indigo-700 tracking-tight">SkillBridge</Link>
-            <nav className="flex gap-6 text-lg items-center">
-              <Link to="/connect" className="hover:text-indigo-600 transition">Connect</Link>
-              <Link to="/projects" className="hover:text-indigo-600 transition">Projects</Link>
-              <Link to="/calendar" className="hover:text-indigo-600 transition">Calendar</Link>
-              <Link to="/chat" className="hover:text-indigo-600 transition">Chat</Link>
-              {auth.user ? (
-                <ProfileDropdown onLogout={auth.logout} />
-              ) : (
-                <AuthButtons />
-              )}
-            </nav>
-          </div>
-        </header>
-        <main className="flex-1 bg-white dark:bg-zinc-900 transition-colors">
+  const navigate = useNavigate();
 
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/connect" element={<Connect />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/chat" element={<Chat />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/settings/*" element={<Settings />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+  useEffect(() => {
+    // Check localStorage or system preference for theme
+    const stored = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (stored === 'dark' || (!stored && prefersDark)) {
+      document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
+    }
+  }, []);
+
+  const handleLogout = async () => {
+    await auth.logout();
+    navigate("/");
+    window.location.reload();
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:bg-zinc-900 dark:text-gray-100 flex flex-col">
+      <header className="bg-white dark:bg-gray-800 shadow sticky top-0 z-10">
+        <div className="max-w-5xl mx-auto flex items-center justify-between p-4">
+          <Link to="/" className="text-2xl font-extrabold text-indigo-600 tracking-tight">SkillBridge</Link>
+          <nav className="flex gap-6 text-lg items-center">
+            <Link to="/connect" className="hover:text-indigo-600 transition">Connect</Link>
+            <Link to="/projects" className="hover:text-indigo-600 transition">Projects</Link>
+            <Link to="/calendar" className="hover:text-indigo-600 transition">Calendar</Link>
+            <Link to="/chat" className="hover:text-indigo-600 transition">Chat</Link>
+            {auth.user ? (
+              <ProfileDropdown onLogout={handleLogout} />
+            ) : (
+              <AuthButtons />
+            )}
+          </nav>
+        </div>
+      </header>
+      <main className="flex-1 bg-white dark:bg-zinc-900 transition-colors">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/connect" element={<Connect />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/settings/*" element={<Settings />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </main>
+    </div>
   );
 }
 

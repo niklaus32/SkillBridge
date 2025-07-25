@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <section className="flex min-h-[60vh] items-center justify-center rounded-lg">
       <div className="w-full max-w-2xl p-8 bg-white dark:bg-gray-800 rounded-lg shadow-md text-center">
-        <h1 className="text-5xl font-extrabold text-indigo-700 mb-4 drop-shadow-lg">
+        <h1 className="text-5xl font-extrabold text-indigo-600 mb-4 drop-shadow-lg">
           Welcome to SkillBridge
         </h1>
         <p className="text-xl text-gray-700 dark:text-white mb-8 max-w-xl mx-auto">

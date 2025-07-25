@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
 
 export default function Login() {
   const [form, setForm] = useState({
@@ -7,20 +9,30 @@ export default function Login() {
     password: "",
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Add Firebase login logic here
     if (!form.identifier || !form.password) {
       setError("Both fields are required.");
       return;
     }
     setError("");
-    // Login logic...
+    setLoading(true);
+    try {
+      // Only email login is supported by Firebase Auth by default
+      await signInWithEmailAndPassword(auth, form.identifier, form.password);
+      navigate("/");
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -46,7 +58,9 @@ export default function Login() {
           className="border rounded px-3 py-2"
           required
         />
-        <button type="submit" className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition">Sign In</button>
+        <button type="submit" className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition" disabled={loading}>
+          {loading ? "Signing in..." : "Sign In"}
+        </button>
         <div className="text-center mt-2 text-sm text-gray-600">
           Don't have an account?
         </div>

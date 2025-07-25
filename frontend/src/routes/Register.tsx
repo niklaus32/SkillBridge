@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../firebase";
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -15,15 +17,22 @@ export default function Register() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Add Firebase registration logic here
     if (!form.firstName || !form.lastName || !form.username || !form.email || !form.password) {
       setError("All fields are required.");
       return;
     }
     setError("");
-    // Registration logic...
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, form.email, form.password);
+      await updateProfile(userCredential.user, {
+        displayName: `${form.firstName} ${form.lastName}`,
+      });
+      // Optionally redirect or show success
+    } catch (err: any) {
+      setError(err.message);
+    }
   };
 
   return (
