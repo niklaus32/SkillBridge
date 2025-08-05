@@ -8,6 +8,7 @@ import Calendar from "./routes/Calendar";
 import Chat from "./routes/Chat";
 import Register from "./routes/Register";
 import Login from "./routes/Login";
+import ForgotPassword from "./routes/ForgotPassword";
 import Settings from "./routes/Settings";
 import Profile from "./routes/Profile";
 
@@ -74,9 +75,14 @@ function ProfileDropdown({ onLogout }) {
 
 function AuthButtons() {
   return (
-    <Link to="/register">
-      <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition">Sign Up</button>
-    </Link>
+    <div className="flex gap-2">
+      <Link to="/register">
+        <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 transition">Sign Up</button>
+      </Link>
+      <Link to="/login">
+        <button className="px-4 py-2 bg-white border border-indigo-600 text-indigo-700 rounded-lg shadow hover:bg-indigo-50 dark:bg-gray-900 dark:text-white dark:border-indigo-400 dark:hover:bg-gray-800 transition">Sign In</button>
+      </Link>
+    </div>
   );
 }
 
@@ -130,7 +136,9 @@ function App() {
           <Route path="/chat" element={<Chat />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/settings/*" element={<Settings />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
       </main>
