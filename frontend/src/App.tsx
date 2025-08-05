@@ -30,7 +30,7 @@ const useAuth = () => {
   };
 };
 
-function ProfileDropdown({ onLogout }) {
+function ProfileDropdown({ onLogout }: { onLogout: () => void }) {
   const [open, setOpen] = useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
