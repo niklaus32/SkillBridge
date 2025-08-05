@@ -36,7 +36,7 @@ export default function Login() {
   };
 
   return (
-    <section className="flex items-center justify-center bg-gray-50 dark:bg-zinc-900 pt-24 pb-8 min-h-[calc(100vh-4rem)]">
+    <section className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-zinc-900">
       <form onSubmit={handleSubmit} className="w-full max-w-md p-8 bg-white dark:bg-gray-900 rounded-lg shadow-md flex flex-col gap-4">
         <h1 className="text-2xl font-bold text-indigo-700 mb-2 text-center">Sign In</h1>
         {error && <div className="text-red-600 text-sm mb-2">{error}</div>}
